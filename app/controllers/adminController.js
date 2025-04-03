@@ -40,9 +40,6 @@ const deleteUser = async (req, res) => {
     // Delete user
     await User.findByIdAndDelete(userId);
     
-    // Also delete their votes (optional, depending on requirements)
-    await Vote.deleteMany({ user: userId });
-    
     res.json({ message: 'User deleted successfully' });
   } catch (err) {
     console.error('Error deleting user:', err);
