@@ -33,7 +33,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await User.deleteMany({
-    username: { $in: ['testuser', 'adminuser', 'newuser'] }
+    username: { $in: ['testuser', 'adminuser', 'newuser', 'editeduser', 'deleteuser'] }
   });
 
   await Vote.deleteMany({
@@ -107,5 +107,67 @@ describe('Voting App API', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.users.length).toBeGreaterThan(0);
     expect(res.body.users[0]).not.toHaveProperty('password');
+  });
+
+  test('7. Delete user as admin', async () => {
+    // First create a user to delete
+    const newUser = new User({ username: 'deleteuser', password: 'deletepass', role: 'user' });
+    await newUser.save();
+    const deleteUserId = newUser._id;
+
+    const res = await request(app)
+      .delete(`/api/admin/users/${deleteUserId}`)
+      .set('Authorization', `Bearer ${adminToken}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe('User deleted successfully');
+
+    // Verify user was actually deleted
+    const deletedUser = await User.findById(deleteUserId);
+    expect(deletedUser).toBeNull();
+  });
+
+  test('8. Edit user as admin', async () => {
+    // First create a user to edit
+    const editUser = new User({ username: 'edituser', password: 'editpass', role: 'user' });
+    await editUser.save();
+    const editUserId = editUser._id;
+
+    const updatedInfo = {
+      username: 'editeduser',
+      role: 'admin'
+    };
+
+    const res = await request(app)
+      .put(`/api/admin/users/${editUserId}`)
+      .set('Authorization', `Bearer ${adminToken}`)
+      .send(updatedInfo);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe('User updated successfully');
+    expect(res.body.user.username).toBe('editeduser');
+    expect(res.body.user.role).toBe('admin');
+
+    // Verify user was actually updated in database
+    const modifiedUser = await User.findById(editUserId);
+    expect(modifiedUser.username).toBe('editeduser');
+    expect(modifiedUser.role).toBe('admin');
+  });
+
+  test('9. Regular user cannot delete users', async () => {
+    const res = await request(app)
+      .delete(`/api/admin/users/${adminId}`)
+      .set('Authorization', `Bearer ${userToken}`);
+
+    expect(res.statusCode).toBe(403);
+  });
+
+  test('10. Regular user cannot edit users', async () => {
+    const res = await request(app)
+      .put(`/api/admin/users/${adminId}`)
+      .set('Authorization', `Bearer ${userToken}`)
+      .send({ username: 'hacked', role: 'admin' });
+
+    expect(res.statusCode).toBe(403);
   });
 });
