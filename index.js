@@ -3,7 +3,7 @@ const { mongoURI, port } = require('./app/modules/config');
 const routeWrapper = require('./app/modules/routeWrapper');
 const { connectMongoDB } = require('./app/modules/mongo');
 const cors = require('cors');
-const allowedOrigins = ['http://localhost:5173'];
+const allowedOrigins = ['http://localhost:5173','http://localhost:4173'];
 const app = express();
 
 app.use(express.json());
