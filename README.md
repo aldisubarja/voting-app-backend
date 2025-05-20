@@ -18,7 +18,7 @@ npm install
 cp .example.env .env
 cat > .env <<EOL
 PORT=5000
-JWT_SECRET=octomate-key-backend
+JWT_SECRET=voting-app-key-backend
 MONGO_URI="YOUR_MONGO_URI"
 EOL
 
