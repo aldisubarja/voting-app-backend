@@ -1,4 +1,4 @@
-# octomate-test-backend
+# voting-app-backend
 
 A simple voting system backend built with Node.js, Express, MongoDB, and JWT authentication. Includes user registration, login, voting functionality, and admin access for results.
 
