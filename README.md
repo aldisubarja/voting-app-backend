@@ -8,8 +8,8 @@ A simple voting system backend built with Node.js, Express, MongoDB, and JWT aut
 
 ### 1. Clone the Repository
 
-git clone https://github.com/aldisubarja/octomate-test-backend.git
-cd octomate-test-backend
+git clone https://github.com/aldisubarja/voting-app-backend.git
+cd voting-app-backend
 
 ### 2. Install dependencies
 npm install
