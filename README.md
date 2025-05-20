@@ -19,7 +19,7 @@ cp .example.env .env
 cat > .env <<EOL
 PORT=5000
 JWT_SECRET=octomate-key-backend
-MONGO_URI="mongodb+srv://aldisubarja:30u9vESJh9HXh8sU@cluster-free-aldi.nqqqfqx.mongodb.net/?retryWrites=true&w=majority&appName=cluster-free-aldi"
+MONGO_URI="YOUR_MONGO_URI"
 EOL
 
 ### 4. Run test
